@@ -1,6 +1,10 @@
 package function
 
-import "testing"
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
 
 //
 //import (
@@ -13,13 +17,29 @@ import "testing"
 //	"testing"
 //)
 
-
-
-
 func TestGet(t *testing.T) {
-	t.Log("logging test...")
+	t.Log("testing GET....")
+}
+
+func TestPost(t *testing.T) {
+	t.Log("testing POST....")
+	// create a user
+	req, err := http.NewRequest("POST", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(User)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusCreated {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
 
 }
+
 //func TestGet(t *testing.T) {
 //
 //	// create a user
